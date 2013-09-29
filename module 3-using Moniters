@@ -1,0 +1,79 @@
+Monitor MultipleBarber_Pre 
+{
+	int availSeat, availwsaher;
+	int nextSeatIn, nextSeatOut;
+    enum{Vacant, Occupied} seatState[seatCount];
+    enum{Ready, Sleep, Assigned} barberState[washerCount];
+    condition seat[seatCount];
+    condition barber[washerCount];
+    void initialize() 
+	{
+      availSeat = seatCount;
+      nextSeatIn = 0;
+      nextSeatOut = 0;
+       for( int i = 0; i < seatCount; ++i )
+            seatState[i] = Vacant;
+            availwasher = washerCount;
+                forI int j = 0; j < washerCount; ++j )
+                   washerState[j] = Ready;
+    }
+   int checkSeat()
+    {
+      if( availSeat == 0 ) return -1; //Client will leave.
+          int k = nextSeatIn;
+          seatState[k] = Occupied;
+          availSeat--;
+          nextSeatIn = ( nextSeatIn + 1 ) % n;
+          return k;
+   } 
+   void callwasher( int i )
+   {
+     if( i != nextSeatOut )     //Not a turn
+	  { 
+ 		seat[i].wait();
+	  }
+      findwasher();
+       if( seat[i].state != Vacant )
+	    { 
+          seat[i].wait();
+        }
+   }
+   void findwasher( int i )   //Find non-assigned washer
+    { 
+     if( availwasher == 0 )
+        return;
+        for( int j = 0; j < washerCount; ++j )
+		 {
+           if( washerState[j] != Assigned )   //Find available washer
+		   { 
+			availwasher--;
+			washerState[j] = Assigned;
+			washer[j].signal();
+			}
+		}
+      moveClientTowasherChair( i );
+   } 
+   void moveClientTowasherChair( int i )
+   {
+     seatState[i] = Vacant;
+     availSeat++;
+     nextSeatOut = ( nextSeatOut + 1 ) % seatCount;
+     seat[i].signal();
+  }
+  void callClient( int i )
+   {
+    if( availSeat == seatCount )   //No client
+	 { 
+		washerState[i] = Sleep;
+		washer[i].wait;
+	 }
+	washerState[i] = Assigned;
+	availwasher--;
+	moveClientTowasherChair( nextSeatOut );
+  }
+  void finish( int i )    //Set washer state back to ready
+  {
+	washerState[i] = Ready;
+	availwasher++;
+  }
+}
