@@ -1,0 +1,29 @@
+WASHERMAN PROBLEM: 2 Washermen wishing to occupy available 1 wash platform
+
+The below described washerman problem describes the problem associated with 
+shared resources in real life. 
+
+Here there are two processes in the form of washermen
+Washerman 1
+Washerman 2
+
+and the shared resource is washing platform required to wash clothes.
+
+Both the washermen wish to occupy the only available platform at the same time
+which results in the problem.
+
+This problem can be seen in operating systems as well when there are more
+processes requesting shared resource at same time.
+
+To solve this problem, we can use a Semaphore With busy waiting.
+Whenever a washerman goes into the washroom to wash clothes, he closes the door
+which acts as a notifier to the other washerman. Since, we use busy waiting,
+the other washer man keeps on checking the present status of the wash room 
+if it is open or closed.
+
+Here,
+SEMAPHORE is: WashRoom Door
+Shared Resource is: Washing Platform
+
+Hence, we can easily do process synchronization between the two washerman using Semaphores.
+
