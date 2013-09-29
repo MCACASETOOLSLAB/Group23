@@ -1,0 +1,16 @@
+A soultion to the washer man problem using monitores . 
+This the easiest monitor is solving the problem . Normally.
+I design from a set of procedures first. Then, add shared variables, state variables, and conditions as appeared in these procedures. 
+Remember to write initialization code every time to avoid deadlocks.
+Monitor consists of 4 major parts:
+1. Condition variables to control process queue
+2. Optional shared data (buffer and process state for example)
+3. Procedures
+4. Initialization code
+Condition variables are main component used for process synchronization. However, it does not work like semaphore.
+For semaphore, when we say wait(mutex), a process may get pass it for the first use. 
+For monitor, however, every time we say condition.wait, a process will be blocked withno exception. 
+Condition variables are normally packed together into an array.
+It is important to aware that initialization procedure must be bundled to a monitor, although we have nothing to do inside that procedure. 
+However, if we have state variables, which are considered shared data, our initialization code will be non-trivial. 
+Correctness is hard to verified, but we should know from our usage of wait and signal.
