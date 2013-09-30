@@ -1,0 +1,268 @@
+ <html>
+<head>
+    <title>PROCESS SYNCHRONIZATION without busy waiting</title>
+<style type="text/css">
+#b1
+{
+position:absolute;
+left:50px;
+top:300px;
+}
+
+#b2
+{
+position:absolute;
+left:50px;
+top:300px;
+}
+	
+#b3
+{
+position:absolute;
+left:50px;
+top:300px;
+}
+
+#t1
+{
+position:absolute;
+left:420px;
+top:0 px;
+}
+#m3
+{
+position:absolute;
+left:50px;
+top:500px;
+
+}
+
+#desc
+{
+position:absolute;
+left:50px;
+top:650px;
+
+}
+</style>
+
+</head>
+<body bgcolor="grey">
+    <h2><u>Synchronization without busy waiting</u></h2>
+
+<div id="t1">
+    <img src="washarea.jpg" alt="wash_area" height="300px" width="500px">WASH_AREA <br/> <center>CRITICAL SECTION</center>
+</div>
+
+<div id="b1">
+<img src="washerman.jpg" alt="student" height="200px" width="170px">STUDENT_1
+ </div>
+
+<div id="b2">
+<img src="washerman.jpg" alt="student" height="200px" width="170px">STUDENT_2
+ </div>
+
+<div id="b3">
+<img src="washerman.jpg" alt="student" height="200px" width="170px">STUDENT_3
+ </div>
+
+<!-- <div id="h2">
+<img src="http://0.tqn.com/d/archaeology/1/0/x/F/office.JPG" alt="HOD_office"height="200px" width="200px">HOD OFFICE<br/>(CPU)
+</div> -->
+
+<script type="text/javascript">
+var n;
+var classfull=0;
+var timer2 = null;
+var timer1 = null;
+var s=0;
+var s1=0;
+var a=100;
+var b=200;
+var i=1;
+var a1=100;
+var b1=200;
+var x1=100;
+var y1=200;
+var w=0;
+var a3=100;
+var b3=200;
+
+
+// to move the object at desired location..
+
+function moveDomObj(id,left,right,top,bottom)
+{
+  var domObj = document.getElementById(id);
+domObj.style.left = left+"px";
+  domObj.style.top = top+"px";
+domObj.style.right = right+"px";
+domObj.style.bottom = bottom+"px";
+}
+ 
+
+
+
+//main function that is used when 1 class releases the resource..
+function free()
+{
+ signal1();
+ signal2();
+}
+
+
+
+
+
+
+//used by class1 to signal class 2 that its work is done..
+function signal1(){
+//alert("gggg");
+
+var x=a;
+var y=b;
+ moveDomObj("b1",x,200,b,0);
+a+=10;
+b-=10;
+if(a<=860)
+timer2 = setTimeout(signal1, 200);
+
+}
+
+
+// used by class 2 to receive class1s' signal and to receive in its critical section'
+function signal2(){
+var x=a1;
+var y=b1;
+ moveDomObj("b2",x,200,b1,0);
+a1-=20;
+b1-=8.5;
+if(a1>=450)
+timer1 = setTimeout(signal2, 200);
+}
+
+
+
+
+
+//main function to allocate the class
+function allocate()
+{
+   // alert(classfull);
+    if(classfull==0)
+        {
+            ws();
+            alert("Student 1 enter into the wash area");
+        }
+    else if(classfull==1 && w==0)
+    {
+        alert("Wash platform is occupied..student 2 goes into blocked state");
+        ws5();
+      
+    }
+else if(classfull==1 && w==1)
+{
+alert("Wash platform is occupied..student 3 goes into blocked state");
+ws6();
+}
+else
+{
+alert("NO more student waiting to wash clothes..");
+}
+}
+
+
+
+function ws6()
+{
+w=2;
+  var x=a3;
+  var y=b3;
+moveDomObj("b3",x,200,b3,0);
+
+if(a3<=450)
+    {
+        a3+=20;
+        b3+=3;
+        timer2 = setTimeout(ws6, 200);
+    }
+else if(a3>450 && a3<=880)
+    {
+       a3+=10;  
+    timer2 = setTimeout(ws6, 200);
+
+}
+w=2;
+}
+
+
+
+
+//To move the STUDENT 1 towards the WASHAREA to see whether they are free or not..
+function ws()
+{
+var x=a;
+var y=b;
+ moveDomObj("b1",x,200,b,0);
+a+=20;
+b-=8.5;
+if(a<=450)
+timer2 = setTimeout(ws, 200);
+
+classfull=1;
+return;
+}
+
+
+
+
+
+function ws5()
+{
+w=1;
+var x=a1;
+var y=b1;
+ moveDomObj("b2",x,200,b1,0);
+
+if(a1<=450)
+    {
+        a1+=20;
+        b1+=3;
+        timer2 = setTimeout(ws5, 200);
+    }
+else if(a1>450 && a1<=880)
+    {
+       a1+=10;  
+    timer2 = setTimeout(ws5, 200);
+
+}
+else{
+w=1;
+return;
+}
+}
+
+
+
+
+
+
+</script>
+
+<div id="m3">
+    <br/> <br/>
+<input type="button" name="animation" value="ALLOCATION" onclick="allocate()"><br><br/>
+<input type="button" name="animation" value="WAKE-UP" onclick="free()"><br><br/>
+</div>
+
+    <div id="desc">
+        <h3>PROCESS to be followed :</h3>
+        <ul>
+            <li>Press "ALLOCATION" button. You will see one class moving to the classroom.</li>
+            <li>Press "ALLOCATION" button again.</li>
+			<li>press "ALLOCATION" button again.</li>
+            <li>Press "WAKE-UP" button.</li>
+        </ul>
+    </div>
+</body>
+</html>
